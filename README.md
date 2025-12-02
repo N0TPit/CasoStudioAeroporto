@@ -1,5 +1,7 @@
 # CasoStudioAeroporto
 # Gruppo di Lavoro: Michele Napoletano | Luca John Bowen | Michele Innamorato
+
+# Insert MongoDB
 use airport_management;
 
 1. Inserimento Aeroporti (Include Gate)
@@ -69,3 +71,53 @@ db.voli_operativi.insertMany([
     "personale_bordo": ["M001", "M002"]
   }
 ]);
+
+# Script Validator
+
+use airport_management;
+
+// Validazione per Voli Operativi
+db.runCommand({
+  collMod: "voli_operativi",
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["id_volo_programmato", "data_volo", "stato"],
+      properties: {
+        stato: {
+          enum: ["SCHEDULATO", "IMBARCO", "PARTITO", "IN_VOLO", "ATTERRATO", "CANCELLATO"],
+          description: "Lo stato deve essere uno dei valori validi"
+        },
+        data_volo: {
+          bsonType: "date",
+          description: "Deve essere una data valida"
+        },
+        gate_assegnato: {
+          bsonType: "object",
+          required: ["terminal", "numero"],
+          properties: {
+            terminal: { bsonType: "string" },
+            numero: { bsonType: "string" }
+          }
+        }
+      }
+    }
+  }
+});
+
+// Validazione per Aeroporti
+db.runCommand({
+  collMod: "aeroporti",
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["nome_aeroporto", "citta"],
+      properties: {
+        citta: {
+          bsonType: "string",
+          description: "La città è obbligatoria"
+        }
+      }
+    }
+  }
+});
