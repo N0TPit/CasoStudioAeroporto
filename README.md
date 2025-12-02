@@ -4,7 +4,6 @@
 # Insert MongoDB
 use airport_management;
 
-1. Inserimento Aeroporti (Include Gate)
 db.aeroporti.insertMany([
   {
     "_id": "FCO",
@@ -76,7 +75,6 @@ db.voli_operativi.insertMany([
 
 use airport_management;
 
-// Validazione per Voli Operativi
 db.runCommand({
   collMod: "voli_operativi",
   validator: {
@@ -105,7 +103,6 @@ db.runCommand({
   }
 });
 
-// Validazione per Aeroporti
 db.runCommand({
   collMod: "aeroporti",
   validator: {
